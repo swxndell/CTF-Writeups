@@ -1,25 +1,63 @@
-Simple CTF  
+# 🕵️‍♂️ TryHackMe – Simple CTF Writeup
 
-1. Methodology/Thoughts
-------------------------
+## 1. Methodology & Thoughts
+---
 
-Ran an nmap scan on the target IP and there were two services running under port 1000, on port 21 & 80.
-Ran a port specific scan against port 2222 to see that ssh service was running on this port.
-Performing an aggressive scan against the open ports (-A) it shows that port 80 is running a web server, so typing the target IP into the browser we see that it shows the Apache 2 Ubuntu Default page. Here I had to get some help online with the subdomain enumeration, and came across OWASP Zap which I hadn’t used for a number of years. I ran a scan against the target IP to search for any known web vulnerabilities. However, I didn’t find anything after going through the results, so I turned to Dirb and came across http:/10.10.95.116/simple and found the application in question (CMS Made Simple) running version 2.2.8 and a quick google lead me to the CVE (CVE-2019-9053).
-The exploit listed is SQL Injection (sqli)
-I struggled with the task of finding the password initially, but eventually, using online forums I used the EDB-ID of the exploit (46635) and saved it to a python file. I used the common credentials list in the TryHackMe hint but I couldn’t get the script to run. However, by converting the python file from p2 to p3 I was able to run it. With the following results; 
-Using hydra and the rockyou.txt password list I was able to crack it;
+- Ran a full `nmap` scan on the target IP and found two services running under port 1000:  
+  - **Port 21** – FTP  
+  - **Port 80** – HTTP  
+- Ran a targeted scan against **port 2222** and found an **SSH** service.
+- Using `nmap -A`, confirmed port 80 was serving a web server (Apache 2 Ubuntu Default Page).
 
-Where can you login with the details obtained? ssh protocol to login (port 2222)
-After signing in as mitch using the newly obtained password I can see there exists a user.txt file which when opened contained the flag (G00d j0b, keep up!)
-Is there any other user in the home directory? What's its name? Navigate to the home folder and list users, sunbath is the other user.
-I used “sudo -l” to see what programs mitch could run and “vim” was listed.
-After running Vim and noting I was a root user, I looked for files and found root.txt, which after opening contained the root flag (W3ll d0n3. You made it!) 
+### Web Enumeration
 
-2. Tools & Commands Used
-------------------------
-- List of tools used: namp, OWASP Zap, Hydra, Dirb
+- Initially tried subdomain enumeration (with help from online forums).
+- Rediscovered **OWASP Zap**, which I hadn't used in a while, to scan the site.
+- Didn't find vulnerabilities directly, so pivoted to **Dirb**.
+- Discovered `http://10.10.95.116/simple`, hosting **CMS Made Simple v2.2.8**.
+- A quick search led to the known vulnerability:  
+  **CVE-2019-9053** → SQL Injection.
 
-4. Takeaways
-------------
-- I really enjoyed this box, it reminded me why I love cyber security and am transitioning back into the field after graduating from university and taking a different direction. I noticed a lot of the skills flooding back and am excited to do more.
+### Exploitation
+
+- Used **Exploit-DB ID 46635**.
+- Converted the Python 2 script to Python 3 so it would run properly.
+- Used `rockyou.txt` with **Hydra** to brute-force credentials.
+
+### Gaining Access
+
+- Logged in via **SSH** on port **2222** with user: `mitch`.
+- Found `user.txt` containing the user flag:  
+  **G00d j0b, keep up!**
+
+### Privilege Escalation
+
+- Found another user: `sunbath` by listing home directories.
+- Ran `sudo -l` and saw `vim` could be run as root.
+- Used `vim` to spawn a root shell.
+- Retrieved `root.txt` flag:  
+  **W3ll d0n3. You made it!**
+
+---
+
+## 2. Tools & Commands Used
+---
+
+- [`nmap`](https://nmap.org/) – Network scanning
+- [`OWASP Zap`](https://owasp.org/www-project-zap/) – Web vulnerability scanning
+- [`Dirb`](https://tools.kali.org/web-applications/dirb) – Directory brute-forcing
+- [`Hydra`](https://github.com/vanhauser-thc/thc-hydra) – Brute-force login
+- Python exploit from Exploit-DB (converted from Python 2 to 3)
+
+---
+
+## 3. Takeaways
+---
+
+- Really enjoyed this box — it reminded me why I’m passionate about cyber security.
+- Though it was challenging at points (especially running the exploit), it helped old skills come back quickly.
+- Excited to keep building on this and work toward my pivot back into the field!
+
+---
+
+✅ **One box down. Many more to come.**
