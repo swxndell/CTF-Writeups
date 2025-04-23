@@ -1,0 +1,25 @@
+Simple CTF  
+
+1. Methodology/Thoughts
+------------------------
+
+Ran an nmap scan on the target IP and there were two services running under port 1000, on port 21 & 80.
+Ran a port specific scan against port 2222 to see that ssh service was running on this port.
+Performing an aggressive scan against the open ports (-A) it shows that port 80 is running a web server, so typing the target IP into the browser we see that it shows the Apache 2 Ubuntu Default page. Here I had to get some help online with the subdomain enumeration, and came across OWASP Zap which I hadn’t used for a number of years. I ran a scan against the target IP to search for any known web vulnerabilities. However, I didn’t find anything after going through the results, so I turned to Dirb and came across http:/10.10.95.116/simple and found the application in question (CMS Made Simple) running version 2.2.8 and a quick google lead me to the CVE (CVE-2019-9053).
+The exploit listed is SQL Injection (sqli)
+I struggled with the task of finding the password initially, but eventually, using online forums I used the EDB-ID of the exploit (46635) and saved it to a python file. I used the common credentials list in the TryHackMe hint but I couldn’t get the script to run. However, by converting the python file from p2 to p3 I was able to run it. With the following results; 
+Using hydra and the rockyou.txt password list I was able to crack it;
+
+Where can you login with the details obtained? ssh protocol to login (port 2222)
+After signing in as mitch using the newly obtained password I can see there exists a user.txt file which when opened contained the flag (G00d j0b, keep up!)
+Is there any other user in the home directory? What's its name? Navigate to the home folder and list users, sunbath is the other user.
+I used “sudo -l” to see what programs mitch could run and “vim” was listed.
+After running Vim and noting I was a root user, I looked for files and found root.txt, which after opening contained the root flag (W3ll d0n3. You made it!) 
+
+2. Tools & Commands Used
+------------------------
+- List of tools used: namp, OWASP Zap, Hydra, Dirb
+
+4. Takeaways
+------------
+- I really enjoyed this box, it reminded me why I love cyber security and am transitioning back into the field after graduating from university and taking a different direction. I noticed a lot of the skills flooding back and am excited to do more.
