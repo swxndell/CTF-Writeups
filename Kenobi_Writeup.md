@@ -42,7 +42,7 @@ The *Kenobi* room was a challenging yet valuable learning experience. I had to l
 
 ## Reflection
 
-This room was tricky and really pushed me to think critically and learn on the fly. I didn’t get everything right away, but that’s what made it rewarding. The room highlighted the importance of persistence, and how valuable it is to document and research unfamiliar techniques.
+This room was tricky and really pushed me to think critically and learn on the fly. I didn’t get everything right away, but that’s what made it rewarding. However it did highlight how imnportant it is to feel comforabtle search the web for assitance, something that is so common in cybersecurity.
 
 ---
 
